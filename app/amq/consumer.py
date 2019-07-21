@@ -25,8 +25,8 @@ class Consumer(object):
         channel = connection.channel()  # start a channel
         channel.queue_declare(queue='Taiga_Repository_Test')
         channel.queue_declare(queue='Taiga_Collaborator')
-        channel.basic_consume('Taiga_Repository_Test', callback_project)
-        channel.basic_consume('Taiga_Collaborator', callback_collaborator)
+        channel.basic_consume('Taiga_Repository_Test', callback_project, auto_ack=True)
+        channel.basic_consume('Taiga_Collaborator', callback_collaborator, auto_ack=True)
         try:
             channel.start_consuming()
         except KeyboardInterrupt:

@@ -1,5 +1,3 @@
-import json
-
 from taiga import TaigaAPI
 
 from app.taiga.blueprint import authenticate
