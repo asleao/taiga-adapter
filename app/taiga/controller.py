@@ -39,11 +39,12 @@ def manage_collaborators(data):
     project = taiga_object.projects.get_by_slug(project_slug)
     role = project.list_roles().get(name='Desenvolvedor')
 
+    project.list_memberships().get()
     for collaborator in collaborators:
         if data['action'] == 'add':
             add_collaborator(project, role, collaborator)
         elif data['action'] == 'remove':
-            remove_collaborator(project, collaborator, project_name)
+            remove_collaborator(project, role, collaborator, project_name)
 
 
 def add_collaborator(project, role, collaborator):
@@ -55,13 +56,14 @@ def add_collaborator(project, role, collaborator):
         collaborator, project.name))
 
 
-def remove_collaborator(project, collaborator, project_name):
+def remove_collaborator(project, role, collaborator, project_name):
     """
         Funcion responsable to remove collaborators from the project.
     """
-    if project.has_in_collaborators(collaborator) == False:
-        # TODO: realizar um retorno http para usuário não existente
-        return print('{} doesn\'t exist in {}!'.format(collaborator, project_name))
+    membership = project.list_memberships().get(email=collaborator, role=role.id)
+
+    if membership is None:
+        return print('{} doesn\'t exist in {}!'.format(collaborator, project))
     else:
-        project.remove_from_collaborators(collaborator)
+        membership.delete()
         return print('{} removed succesfully from {}!'.format(collaborator, project_name))
