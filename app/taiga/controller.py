@@ -41,24 +41,23 @@ def manage_collaborators(data):
 
     for collaborator in collaborators:
         if data['action'] == 'add':
-            add_collaborator(project, role, collaborator, username)
+            add_collaborator(project, role, collaborator)
         elif data['action'] == 'remove':
             remove_collaborator(project, collaborator, project_name)
 
 
-def add_collaborator(project, role, collaborator, username):
+def add_collaborator(project, role, collaborator):
     """
-        Funcion responsable for adding collaborators to the repository.
+        Funcion responsable for adding collaborators to the project.
     """
-
-    project.add_membership(collaborator, role.id, username=username)
+    project.add_membership(email=collaborator, role=role.id, username=collaborator)
     print('{} added succesfully on {}!'.format(
         collaborator, project.name))
 
 
 def remove_collaborator(project, collaborator, project_name):
     """
-        Funcion responsable to remove collaborators from the repository.
+        Funcion responsable to remove collaborators from the project.
     """
     if project.has_in_collaborators(collaborator) == False:
         # TODO: realizar um retorno http para usuário não existente
