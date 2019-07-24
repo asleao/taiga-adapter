@@ -1,0 +1,24 @@
+language: python
+python:
+  - 3.6
+jdk:
+  - oraclejdk8
+addons:
+  sonarcloud:
+    organization: asleao-github
+    token:
+      secure: "$SONAR_TOKEN"
+    branches:
+      - master
+install:
+  - pip install -r requirements.txt
+script:
+  - sonar-scanner -Dsonar.login=$SONAR_TOKEN
+deploy:
+  provider: heroku
+  api_key:
+    secure: HaZZhZIzmf3PlTcN1rKDyDeHInn+dXTi1WcJg6xMzEHoyKjOnBjdL8jAsvWeWyTvhV6xz6AvaAJ5e3yckcdf37Kdi5mM3/ZzzWedsd0o1HfbnvAyVbsPnl3nGJnu/QA1l0mb87hMSmswmDylLO14Ln7mZF4yN9SQr9XFE2D8GovDxlN2gWDGzrusIqXvcMGn8IK2u56Mdc6DvaUiUEq6LuMuZm3u5+zqMOxuf9rK22xLryj+hp7nlAbWuULBU51uem9LhzwQtJ3BhChz0OEX/wlWc4ObXTJCLal6+BZ4m9dh1gy5DMJju3BuFQpwANZxPgSHrzKca2MU9M3XjgcW8/orOu2QM4RX7HSnfUGAPzi4mtAfYw357vs09eBWaEjSiXUklD8evU6147e35UjfyH/qbyyUoytBNiloWFOAeqZekVyoDU8Y2RcS9BGzX4qiI7R4N7KTZeEjOaqBPjJhDJMQMxF65C2DxtTUDwj4YlgFB7r8BSnKPt3VZ3SZGnPUXsFiCP4sYlphgu5NTFg9dh/qALv6J7rob7d7Z6tBa4mYTovHnBLpr8+XX322Ni14oir6WjHTkZxu23cCedhzQl582I+fdU64H6FblaZ1b6AaUqWYee5sBGwJ94JSfB2wFUL626jg0Y6iA9Xa5DjUakoXOEu06XUbjZNzNOT2QV4=
+  app: taiga-adapter
+  on:
+    repo: asleao/taiga-adapter
+    branch: master
