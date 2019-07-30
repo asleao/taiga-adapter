@@ -21,14 +21,17 @@ def manage_project(data):
     if data['action'] == 'add':
         add_project(project_name, taiga_object)
     elif data['action'] == 'remove':
-        username = taiga_object.me().username
-        project_slug = '{}-{}'.format(username, project_name.lower())
-        project = taiga_object.projects.get_by_slug(project_slug)
-        project.delete()
-
-        print('{} removed succesfully!'.format(project_name))
+        remove_project(project_name, taiga_object)
 
     # TODO Enviar callback?
+
+
+def remove_project(project_name, taiga_object):
+    username = taiga_object.me().username
+    project_slug = '{}-{}'.format(username, project_name.lower())
+    project = taiga_object.projects.get_by_slug(project_slug)
+    project.delete()
+    print('{} removed succesfully!'.format(project_name))
 
 
 def add_project(project_name, taiga_object):
