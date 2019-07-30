@@ -1,4 +1,5 @@
 import threading
+from os import getenv
 
 import pika
 
@@ -20,13 +21,15 @@ class Consumer(object):
         thread.start()  # Start the execution
 
     def run(self):
+        project_queue = getenv("PROJECT_QUEUE")
+        collaborator_queue = getenv("COLLABORATOR_QUEUE")
         params_amq = setup()
         connection = pika.BlockingConnection(params_amq)
         channel = connection.channel()  # start a channel
-        channel.queue_declare(queue='Taiga_Repository_Test')
-        channel.queue_declare(queue='Taiga_Collaborator_Test')
-        channel.basic_consume('Taiga_Repository_Test', callback_project, auto_ack=True)
-        channel.basic_consume('Taiga_Collaborator_Test', callback_collaborator, auto_ack=True)
+        channel.queue_declare(queue=project_queue)
+        channel.queue_declare(queue=collaborator_queue)
+        channel.basic_consume(project_queue, callback_project, auto_ack=True)
+        channel.basic_consume(collaborator_queue, callback_collaborator, auto_ack=True)
         try:
             channel.start_consuming()
         except KeyboardInterrupt:
