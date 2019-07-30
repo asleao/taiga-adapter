@@ -1,5 +1,4 @@
 from taiga import TaigaAPI
-from taiga.models import Memberships, Membership
 
 from app.taiga.blueprint import authenticate
 
@@ -19,6 +18,20 @@ def manage_project(data):
     """
     taiga_object = authenticate(data)
     project_name = data['name']
+    if data['action'] == 'add':
+        add_project(project_name, taiga_object)
+    elif data['action'] == 'remove':
+        username = taiga_object.me().username
+        project_slug = '{}-{}'.format(username, project_name.lower())
+        project = taiga_object.projects.get_by_slug(project_slug)
+        project.delete()
+
+        print('{} removed succesfully!'.format(project_name))
+
+    # TODO Enviar callback?
+
+
+def add_project(project_name, taiga_object):
     project = taiga_object.projects.create(project_name, project_name, is_private=False)
     project.add_role('Desenvolvedor', permissions=["add_issue", "modify_issue"])
 
